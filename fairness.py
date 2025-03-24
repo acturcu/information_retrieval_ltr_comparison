@@ -5,6 +5,32 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
+def compute_df(ltr_model, test_queries, test_qrels):
+  """
+  Compute the dataframe for a given model. It will be used for the fairness evaluation.
+  ltr_model = trained ltr model,
+  - test_queries = pt.get_dataset("irds:nfcorpus/test/nontopic").get_topics()
+  - test_qrels = pt.get_dataset("irds:nfcorpus/test/nontopic").get_qrels()
+  - or both from pt.get_dataset("irds:nfcorpus/test/nontopic").get_topicsqrels()
+  """
+
+  res_ltr = ltr_model.transform(test_queries)
+
+  combined_df = pd.merge(
+    res_ltr,
+    test_qrels[["qid", "docno", "label"]],
+    on=["qid", "docno"],
+    how="left"
+  )
+
+  combined_df.dropna()
+
+  # combined_df.columns should be Index(['qid', 'docid', 'docno', 'title', 'abstract', 'url', 
+  # 'score', 'query','features', 'rank', 'label'],
+    
+    
+  return combined_df
+
 def dcg_at_k(rels, k):
     """
     Compute Discounted Cumulative Gain (DCG) at rank k.
