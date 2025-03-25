@@ -23,7 +23,7 @@ def compute_df(ltr_model, test_queries, test_qrels):
     how="left"
   )
 
-  combined_df.dropna()
+  combined_df = combined_df.dropna()
 
   # combined_df.columns should be Index(['qid', 'docid', 'docno', 'title', 'abstract', 'url', 
   # 'score', 'query','features', 'rank', 'label'],
@@ -35,7 +35,7 @@ def dcg_at_k(rels, k):
     """
     Compute Discounted Cumulative Gain (DCG) at rank k.
     """
-    rels = np.asfarray(rels)[:k]
+    rels = np.asarray(rels)[:k]
     if rels.size:
         return np.sum((2 ** rels - 1) / np.log2(np.arange(2, rels.size + 2)))
     return 0.0
