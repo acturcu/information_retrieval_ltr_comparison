@@ -101,7 +101,7 @@ def cosine_sim_func(textA, textB):
     sim = cosine_similarity(tfidf_matrix[0], tfidf_matrix[1])[0][0]
     return sim
 
-def individual_fairness_violation(df, text_field, sim_threshold=0.8):
+def individual_fairness_violation(df, text_field, sim_threshold=0.5):
     """
     For each query, compares all document pairs. For each pair:
       - If similarity >= sim_threshold and the documents' rank difference is > 1,
@@ -194,7 +194,7 @@ def compute_kendalls_tau(df_model, df_baseline):
 
 
 
-def fairness_evaluation(df_model, df_baseline=None, k=10, sim_threshold=0.8,  text_field="abstract"):
+def fairness_evaluation(df_model, df_baseline=None, k=10, sim_threshold=0.5,  text_field="abstract"):
     """
     Evaluates fairness metrics for a ranking system.
     Inputs:
